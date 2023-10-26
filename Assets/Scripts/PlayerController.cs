@@ -6,31 +6,40 @@ using UnityEngine;
 public class PlayerController : NetworkBehaviour
 {
     public GameObject spherePrefab;
+    public Material playerMaterialBlue, playerMaterialRed;
     GameObject sphereInstance;
+    Rigidbody rigidbody;
     float dir;
     bool isJumping;
 
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner) this.enabled = false;
+        if (!IsOwner)
+        {
+            this.enabled = false;
+        }
+
+        gameObject.GetComponent<MeshRenderer>().material = IsOwner ? playerMaterialBlue : playerMaterialRed;
+        gameObject.transform.position = new Vector3(0f, 20f, 0f);
     }
 
     [ClientRpc]
-    void ShootClientRPC(Vector3 point, float dir)
+    void ShootClientRPC(Vector3 pos, float dir)
     {
         sphereInstance = Instantiate(spherePrefab);
         sphereInstance.GetComponent<SphereController>().dir = dir;
-        sphereInstance.transform.position = point;
+        sphereInstance.transform.position = pos;
     }
     [ServerRpc]
-    public void ShootServerRPC(Vector3 point, float dir)
+    public void ShootServerRPC(Vector3 pos, float dir)
     {
-        ShootClientRPC(point, dir);
+        ShootClientRPC(pos, dir);
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        rigidbody = gameObject.GetComponent<Rigidbody>();
         dir = 1;
         isJumping = false;
     }
@@ -53,13 +62,14 @@ public class PlayerController : NetworkBehaviour
 
         if (Input.GetKey(KeyCode.W) && !isJumping)
         {
-            gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0f, 10f, 0f);
+            rigidbody.velocity = new Vector3(rigidbody.velocity.x, 10f, rigidbody.velocity.z);
         }
 
         // shoot
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            ShootServerRPC(transform.position, dir);
+            Vector3 pos = new Vector3(transform.position.x + dir, transform.position.y, transform.position.z);
+            ShootServerRPC(pos, dir);
         }
     }
 

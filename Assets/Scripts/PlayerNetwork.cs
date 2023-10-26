@@ -15,35 +15,52 @@ public class PlayerNetwork : NetworkBehaviour
             _netState.Value = new PlayerNetworkData()
             {
                 Position = transform.position,
+                Direction = transform.localScale,
             };
         }
         else
         {
-            // transform.position = Vector3.SmoothDamp(transform.position, _netState.Value.Position, ref _velocity, _interpTime);
             transform.position = _netState.Value.Position;
+            transform.localScale = _netState.Value.Direction;
         }
     }
 
     struct PlayerNetworkData : INetworkSerializable
     {
-        private float _x, _y, _z;
+        private float _PosX, _PosY, _PosZ;
+        private float _ScaleX, _ScaleY, _ScaleZ;
 
         internal Vector3 Position
         {
-            get => new Vector3(_x, _y, _z);
+            get => new Vector3(_PosX, _PosY, _PosZ);
             set
             {
-                _x = value.x;
-                _y = value.y;
-                _z = value.z;
+                _PosX = value.x;
+                _PosY = value.y;
+                _PosZ = value.z;
+            }
+        }
+
+        internal Vector3 Direction
+        {
+            get => new Vector3(_ScaleX, _ScaleY, _ScaleZ);
+            set
+            {
+                _ScaleX = value.x;
+                _ScaleY = value.y;
+                _ScaleZ = value.z;
             }
         }
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
-            serializer.SerializeValue(ref _x);
-            serializer.SerializeValue(ref _y);
-            serializer.SerializeValue(ref _z);
+            serializer.SerializeValue(ref _PosX);
+            serializer.SerializeValue(ref _PosY);
+            serializer.SerializeValue(ref _PosZ);
+
+            serializer.SerializeValue(ref _ScaleX);
+            serializer.SerializeValue(ref _ScaleY);
+            serializer.SerializeValue(ref _ScaleZ);
         }
     }
 }

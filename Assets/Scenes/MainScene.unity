@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.45140338, g: 0.50089324, b: 0.5723158, a: 1}
+  m_IndirectSpecularColor: {r: 0.4514032, g: 0.5008929, b: 0.5723151, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -423,7 +423,7 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 62066506}
-    PlayerPrefab: {fileID: 6989907965386027342, guid: f719d69ebac9b61479e247f144240fbf, type: 3}
+    PlayerPrefab: {fileID: 1981461979761710368, guid: 1313f4717ed55c94db9060c5689937d0, type: 3}
     Prefabs:
       NetworkPrefabsLists: []
     TickRate: 60
@@ -453,7 +453,7 @@ Transform:
   m_GameObject: {fileID: 62066503}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.2115287, y: 3.090012, z: 4.857971}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
