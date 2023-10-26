@@ -1,13 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
     public GameObject spherePrefab;
     GameObject sphereInstance;
     float dir;
     bool isJumping;
+
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner) this.enabled = false;
+    }
+
+    [ClientRpc]
+    void ShootClientRPC(Vector3 point, float dir)
+    {
+        sphereInstance = Instantiate(spherePrefab);
+        sphereInstance.GetComponent<SphereController>().dir = dir;
+        sphereInstance.transform.position = point;
+    }
+    [ServerRpc]
+    public void ShootServerRPC(Vector3 point, float dir)
+    {
+        ShootClientRPC(point, dir);
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -35,11 +54,10 @@ public class PlayerController : MonoBehaviour
             gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0f, 10f, 0f);
         }
 
+        // shoot
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            sphereInstance = Instantiate(spherePrefab) as GameObject;
-            sphereInstance.GetComponent<SphereController>().dir = dir;
-            sphereInstance.transform.position = gameObject.transform.position;
+            ShootServerRPC(transform.position, dir);
         }
     }
 
