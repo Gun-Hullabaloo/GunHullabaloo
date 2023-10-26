@@ -41,11 +41,13 @@ public class PlayerController : NetworkBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             gameObject.transform.Translate(-4f * Time.deltaTime, 0f, 0f);
+            gameObject.transform.localScale = new Vector3(-1f, 1f, 1f);
             dir = -1;
         }
         else if (Input.GetKey(KeyCode.D))
         {
             gameObject.transform.Translate(4f * Time.deltaTime, 0f, 0f);
+            gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
             dir = 1;
         }
 
