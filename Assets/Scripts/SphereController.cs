@@ -15,6 +15,6 @@ public class SphereController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameObject.transform.Translate(10f * dir * Time.deltaTime, 0f, 0f);
+        gameObject.transform.Translate(32f * dir * Time.deltaTime, 0f, 0f);
     }
 }
