@@ -1,30 +1,35 @@
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NetworkButtons : MonoBehaviour
 {
-    private NetworkManager netManager;
+    private RelayManager netManager;
     public GameObject DebugButton;
+
+    string joinCode;
 
     void Awake()
     {
-        netManager = GetComponent<NetworkManager>();
+        netManager = GetComponent<RelayManager>();
     }
-    public void Host()
+    public async void Host()
     {
-        netManager.StartHost();
-        Disable();
+        string joinCode = await netManager.createRelay();
+        GameObject Join = DebugButton.transform.GetChild(1).gameObject;
+        Join.GetComponentInChildren<Text>().text = joinCode;
+        Join.GetComponent<Button>().interactable = false;
+        // Disable();
     }
-    public void Server()
+    public void setJoinCode(string input)
     {
-        netManager.StartServer();
-        Disable();
+        joinCode = input;
     }
     public void Client()
     {
-        netManager.StartClient();
-        Disable();
+        netManager.joinRelay(joinCode);
+        // Disable();
     }
     void Disable()
     {
