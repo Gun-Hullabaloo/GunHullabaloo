@@ -8,7 +8,7 @@ public class PlayerController : NetworkBehaviour
     public GameObject spherePrefab;
     public Material playerMaterialBlue, playerMaterialRed;
     GameObject sphereInstance;
-    Rigidbody rigidbody;
+    Rigidbody playerRb;
     float dir;
     bool isJumping;
 
@@ -39,7 +39,7 @@ public class PlayerController : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rigidbody = gameObject.GetComponent<Rigidbody>();
+        playerRb = gameObject.GetComponent<Rigidbody>();
         dir = 1;
         isJumping = false;
     }
@@ -62,7 +62,7 @@ public class PlayerController : NetworkBehaviour
 
         if (Input.GetKey(KeyCode.W) && !isJumping)
         {
-            rigidbody.velocity = new Vector3(rigidbody.velocity.x, 10f, rigidbody.velocity.z);
+            playerRb.velocity = new Vector3(playerRb.velocity.x, 10f, playerRb.velocity.z);
         }
 
         // shoot
@@ -78,6 +78,11 @@ public class PlayerController : NetworkBehaviour
         if (other.gameObject.tag == "Floor")
         {
             isJumping = false;
+        }
+        else if (other.gameObject.tag == "DeadZone")
+        {
+            gameObject.transform.position = new Vector3(0f, 20f, 0f);
+            isJumping = false;  // prevent fall through
         }
     }
 

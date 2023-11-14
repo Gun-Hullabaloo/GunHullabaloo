@@ -21,6 +21,10 @@ public class RelayManager : MonoBehaviour
         };
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
     }
+    public string getPlayerName()
+    {
+        return AuthenticationService.Instance.PlayerName;
+    }
 
     public async Task<string> createRelay()
     {

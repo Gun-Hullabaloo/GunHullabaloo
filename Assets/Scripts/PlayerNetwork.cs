@@ -6,8 +6,8 @@ using UnityEngine;
 public class PlayerNetwork : NetworkBehaviour
 {
     private readonly NetworkVariable<PlayerNetworkData> _netState = new(writePerm: NetworkVariableWritePermission.Owner);
-    private Vector3 _velocity;
-    [SerializeField] private float _interpTime = 0.1f;
+    // private Vector3 _velocity;
+    // [SerializeField] private float _interpTime = 0.1f;
     void Update()
     {
         if (IsOwner)
