@@ -8,9 +8,14 @@ using Unity.Services.Core;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RelayManager : MonoBehaviour
 {
+    private void Awake()
+    {
+        SceneManager.LoadScene(1);
+    }
     private async void Start()
     {
         await UnityServices.InitializeAsync();
@@ -19,7 +24,8 @@ public class RelayManager : MonoBehaviour
         {
             Debug.Log("Signed in " + AuthenticationService.Instance.PlayerId);
         };
-        await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        if (!AuthenticationService.Instance.IsSignedIn)
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
     }
     public string getPlayerName()
     {

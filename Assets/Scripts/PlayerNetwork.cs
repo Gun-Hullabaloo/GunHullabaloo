@@ -6,8 +6,11 @@ using UnityEngine;
 public class PlayerNetwork : NetworkBehaviour
 {
     private readonly NetworkVariable<PlayerNetworkData> _netState = new(writePerm: NetworkVariableWritePermission.Owner);
-    // private Vector3 _velocity;
-    // [SerializeField] private float _interpTime = 0.1f;
+    private LifeContainer Life;
+    void Start()
+    {
+        Life = gameObject.GetComponent<LifeContainer>();
+    }
     void Update()
     {
         if (IsOwner)
@@ -16,12 +19,14 @@ public class PlayerNetwork : NetworkBehaviour
             {
                 Position = transform.position,
                 Direction = transform.localScale,
+                Life = Life.life,
             };
         }
         else
         {
             transform.position = _netState.Value.Position;
             transform.localScale = _netState.Value.Direction;
+            Life.life = _netState.Value.Life;
         }
     }
 
@@ -29,6 +34,8 @@ public class PlayerNetwork : NetworkBehaviour
     {
         private float _PosX, _PosY, _PosZ;
         private float _ScaleX, _ScaleY, _ScaleZ;
+        public int Life;
+
 
         internal Vector3 Position
         {
@@ -61,6 +68,8 @@ public class PlayerNetwork : NetworkBehaviour
             serializer.SerializeValue(ref _ScaleX);
             serializer.SerializeValue(ref _ScaleY);
             serializer.SerializeValue(ref _ScaleZ);
+
+            serializer.SerializeValue(ref Life);
         }
     }
 }
